@@ -63,13 +63,29 @@ public class Board {
         return this.fields;
     }
 
-    public boolean isLegalMove(int column) {
-        if (column < 0 || column >= this.cols) {
+    public boolean isLegalMove(int slot) {
+        if (slot < 0 || slot >= this.cols) {
             return false;
         }
-        char[] topRow = this.fields[this.rows-1];
-        char field = topRow[column];
+        char[] topRow = this.fields[0];
+        char field = topRow[slot];
         return field == Board.EMPTY_FIELD;
     }
 
+    public void playMove(int slot, char player) {
+        if (!isLegalMove(slot)) {
+            var error = String.format("Move in slot %d is not a legal move.", slot);
+            throw new IllegalArgumentException(error);
+        }
+        if (player != Board.PLAYER_ONE_FIELD && player != Board.PLAYER_TWO_FIELD) {
+            var error = String.format("The player char %c is not allowed.", player);
+            throw new IllegalArgumentException(error);
+        }
+        for (var r = this.rows-1; r >= 0; r--) {
+            if (this.fields[r][slot] == Board.EMPTY_FIELD) {
+                this.fields[r][slot] = player;
+                break;
+            }
+        }
+    }
 }

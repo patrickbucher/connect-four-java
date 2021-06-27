@@ -116,9 +116,67 @@ public class BoardTest {
     @Test
     void illegalMoveOnEmptyBoard() {
         Board board = Board.newDefaultBoard();
-
         int slot = 317;
 
         assertFalse(board.isLegalMove(slot));
+    }
+
+    @Test
+    void playLegalMoveOnEmptyBoard() {
+        char[][] expected = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', 'x', ' ', ' ', ' ', }
+        };
+        Board board = Board.newDefaultBoard();
+        board.playMove(3, Board.PLAYER_ONE_FIELD);
+
+        assertArrayEquals(expected, board.getFields());
+    }
+
+    @Test
+    void playIllegalMoveOnEmptyBoard() {
+        Board board = Board.newDefaultBoard();
+        int slot = 453;
+        char player = Board.PLAYER_ONE_FIELD;
+
+        assertThrows(IllegalArgumentException.class, () -> board.playMove(slot, player));
+    }
+
+    @Test
+    void playLegalMoveWithUnallowedPlayerOnEmptyBoard() {
+        Board board = Board.newDefaultBoard();
+        int slot = 3;
+        char player = '#';
+
+        assertThrows(IllegalArgumentException.class, () -> board.playMove(slot, player));
+    }
+
+    @Test
+    void playLegalMoveOnNonEmptyBoard() {
+        char[][] fieldsBeforeMove = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'x', ' ', ' '},
+            {' ', ' ', ' ', 'x', 'o', ' ', ' '},
+            {' ', 'o', 'x', 'x', 'o', ' ', ' '}
+        };
+        char[][] expectedFieldsAfterMove = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'o', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'x', ' ', ' '},
+            {' ', ' ', ' ', 'x', 'o', ' ', ' '},
+            {' ', 'o', 'x', 'x', 'o', ' ', ' '}
+        };
+
+        Board board = Board.of(fieldsBeforeMove);
+        board.playMove(4, Board.PLAYER_TWO_FIELD);
+
+        assertArrayEquals(expectedFieldsAfterMove, board.getFields());
     }
 }
