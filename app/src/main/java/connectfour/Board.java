@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import com.google.common.primitives.Chars;
 
 public class Board {
-    public static final char EMPTY_FIELD = ' ';
+    public static final char EMPTY_FIELD = '_';
     public static final char PLAYER_ONE_FIELD = 'x';
     public static final char PLAYER_TWO_FIELD = 'o';
 

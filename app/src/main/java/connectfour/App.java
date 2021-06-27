@@ -3,12 +3,66 @@
  */
 package connectfour;
 
+import java.util.Scanner;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+    public static void main(String[] args) {
+        var p1 = Board.PLAYER_ONE_FIELD;
+        var p2 = Board.PLAYER_TWO_FIELD;
+        var board = Board.newDefaultBoard();
+        var minSlot = 1;
+        var maxSlot = board.getFields()[0].length;
+
+        var scanner = new Scanner(System.in);
+
+        boolean finished = false;
+        char currentPlayer = p1;
+        do {
+            var moved = false;
+            int endedUpAtRow = -1;
+            int slot = -1;
+            print(board);
+            do {
+                String input = "";
+                System.out.printf("Player '%c', pick a slot [%d-%d]: ", currentPlayer, minSlot, maxSlot);
+                try {
+                    input = scanner.nextLine();
+                    System.out.println(input);
+                    slot = Integer.parseInt(input) - 1; // zero-based index internally, one-based index as input
+                    if (board.isLegalMove(slot)) {
+                        endedUpAtRow = board.playMove(slot, currentPlayer);
+                        moved = true;
+                    } else {
+                        System.out.printf("Invalid slot '%d', must be between %d and %d!\n", slot, minSlot, maxSlot);
+                    }
+                } catch (NumberFormatException ex) {
+                    System.out.printf("'%s' is not a valid number!", input);
+                }
+            } while (!moved);
+            if (board.isWinningSequenceAt(slot, endedUpAtRow)) {
+                System.out.printf("Player '%c', a winner is you!", currentPlayer);
+                print(board);
+                finished = true;
+            } else {
+                currentPlayer = (currentPlayer == p1) ? p2 : p1;
+            }
+        } while (!finished);
+
+        scanner.close();
     }
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+    private static void print(Board board) {
+        var fields = board.getFields();
+        for (var c = 1; c <= fields[0].length; c++) {
+            System.out.printf("%d ", c);
+        }
+        System.out.print('\n');
+        for (var r = 0; r < fields.length; r++) {
+            for (var c = 0; c < fields[r].length; c++) {
+                System.out.printf("%c ", fields[r][c]);
+            }
+            System.out.print('\n');
+        }
+        System.out.print('\n');
     }
 }
