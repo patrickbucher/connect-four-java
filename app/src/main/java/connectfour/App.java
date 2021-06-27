@@ -40,7 +40,7 @@ public class App {
                 }
             } while (!moved);
             if (board.isWinningSequenceAt(slot, endedUpAtRow)) {
-                System.out.printf("Player '%c', a winner is you!", currentPlayer);
+                System.out.printf("Player '%c', a winner is you!\n", currentPlayer);
                 print(board);
                 finished = true;
             } else {
