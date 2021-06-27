@@ -13,10 +13,14 @@ public class Board {
         return new Board(6, 7);
     }
 
-    private Board(int rows, int cols) {
+    public static Board newCustomBoard(int rows, int cols) {
         if (rows < 4 || cols < 4) {
             throw new IllegalArgumentException("A board needs at least four rows and columns.");
         }
+        return new Board(rows, cols);
+    }
+
+    private Board(int rows, int cols) {
         this.rows = rows;
         this.cols = cols;
         this.fields = new char[rows][];
