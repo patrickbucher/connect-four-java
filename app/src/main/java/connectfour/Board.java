@@ -1,3 +1,5 @@
+package connectfour;
+
 public class Board {
     public static final char EMPTY_FIELD = ' ';
     public static final char PLAYER_ONE_FIELD = 'x';
@@ -7,7 +9,7 @@ public class Board {
     private final int cols;
     private final char[][] fields;
 
-    public static newDefaultBoard() {
+    public static Board newDefaultBoard() {
         return new Board(6, 7);
     }
 
@@ -17,13 +19,17 @@ public class Board {
         }
         this.rows = rows;
         this.cols = cols;
-        this.fields = new char[rows];
+        this.fields = new char[rows][];
         for (int r = 0; r < this.rows; r++) {
-            this.fields[r] = new chars[cols];
+            this.fields[r] = new char[cols];
             for (int c = 0; c < this.cols; c++) {
                 this.fields[r][c] = EMPTY_FIELD;
             }
         }
+    }
+
+    public char[][] getFields() {
+        return this.fields;
     }
 
 }
