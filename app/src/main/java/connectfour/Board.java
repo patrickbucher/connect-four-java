@@ -63,4 +63,13 @@ public class Board {
         return this.fields;
     }
 
+    public boolean isLegalMove(int column) {
+        if (column < 0 || column >= this.cols) {
+            return false;
+        }
+        char[] topRow = this.fields[this.rows-1];
+        char field = topRow[column];
+        return field == Board.EMPTY_FIELD;
+    }
+
 }

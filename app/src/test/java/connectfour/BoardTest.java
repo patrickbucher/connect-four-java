@@ -102,4 +102,23 @@ public class BoardTest {
 
         assertThrows(IllegalArgumentException.class, () -> Board.of(fields));
     }
+
+    @Test
+    void legalMoveOnEmptyBoard() {
+        Board board = Board.newDefaultBoard();
+
+        int slot = 3;
+        var legal = board.isLegalMove(slot);
+
+        assertTrue(legal);
+    }
+
+    @Test
+    void illegalMoveOnEmptyBoard() {
+        Board board = Board.newDefaultBoard();
+
+        int slot = 317;
+
+        assertFalse(board.isLegalMove(slot));
+    }
 }
