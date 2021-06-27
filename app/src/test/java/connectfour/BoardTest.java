@@ -132,8 +132,9 @@ public class BoardTest {
             {' ', ' ', ' ', 'x', ' ', ' ', ' ', }
         };
         Board board = Board.newDefaultBoard();
-        board.playMove(3, Board.PLAYER_ONE_FIELD);
+        var endedUpInRow = board.playMove(3, Board.PLAYER_ONE_FIELD);
 
+        assertEquals(5, endedUpInRow);
         assertArrayEquals(expected, board.getFields());
     }
 
@@ -175,8 +176,84 @@ public class BoardTest {
         };
 
         Board board = Board.of(fieldsBeforeMove);
-        board.playMove(4, Board.PLAYER_TWO_FIELD);
+        var endedUpInRow = board.playMove(4, Board.PLAYER_TWO_FIELD);
 
+        assertEquals(2, endedUpInRow);
         assertArrayEquals(expectedFieldsAfterMove, board.getFields());
+    }
+
+    @Test
+    void noWinningSequenceOnEmptyBoard() {
+        Board board = Board.newDefaultBoard();
+
+        assertFalse(board.isWinningSequenceAt(3, 3));
+    }
+
+    @Test
+    void isWinningSequenceHorizontally() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', 'o', 'o', ' ', ' ', ' ', },
+            {' ', 'x', 'x', 'x', 'x', 'o', ' ', },
+        };
+        Board board = Board.of(fields);
+        int x = 2;
+        int y = 5;
+
+        assertTrue(board.isWinningSequenceAt(x, y));
+    }
+
+    @Test
+    void isWinningSequenceVertically() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ' },
+            {' ', ' ', ' ', 'o', ' ', ' ', ' ' },
+            {' ', ' ', 'x', 'o', ' ', ' ', ' ' },
+            {' ', ' ', 'x', 'o', 'o', ' ', ' ' },
+            {' ', ' ', 'x', 'o', 'x', ' ', ' ' },
+            {' ', ' ', 'o', 'x', 'x', ' ', ' ' }
+        };
+        Board board = Board.of(fields);
+        int x = 3;
+        int y = 4;
+
+        assertTrue(board.isWinningSequenceAt(x, y));
+    }
+
+    @Test
+    void isWinningSequenceDiagonalDown() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', 'o', ' ', ' ', ' ', ' ', ' ', },
+            {' ', 'x', 'o', ' ', ' ', ' ', ' ', },
+            {' ', 'o', 'o', 'o', 'x', ' ', ' ', },
+            {' ', 'x', 'x', 'x', 'o', 'x', ' ', }
+        };
+        Board board = Board.of(fields);
+        int x = 2;
+        int y = 3;
+
+        assertTrue(board.isWinningSequenceAt(x, y));
+    }
+
+    @Test
+    void isWinningSequenceDiagonalUp() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', 'o', },
+            {' ', ' ', ' ', ' ', 'x', 'o', 'o', },
+            {' ', ' ', ' ', ' ', 'o', 'x', 'x', },
+            {' ', ' ', ' ', 'o', 'x', 'o', 'o', },
+            {' ', ' ', 'x', 'x', 'o', 'x', 'x', }
+        };
+        Board board = Board.of(fields);
+        int x = 4;
+        int y = 3;
+
+        assertTrue(board.isWinningSequenceAt(x, y));
     }
 }
