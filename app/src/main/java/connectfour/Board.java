@@ -9,9 +9,17 @@ import java.util.stream.Stream;
 
 import com.google.common.primitives.Chars;
 
+/**
+ * Board represents a game board for Connect Four (Four in a Row).
+ */
 public class Board {
+    /** empty (unplayed) field on the board */
     public static final char EMPTY_FIELD = '_';
+
+    /** player one's field on the board */
     public static final char PLAYER_ONE_FIELD = 'x';
+
+    /** player two's field on the board */
     public static final char PLAYER_TWO_FIELD = 'o';
 
     private static final Character[] LEGAL_FIELDS = { EMPTY_FIELD, PLAYER_ONE_FIELD, PLAYER_TWO_FIELD };
@@ -20,10 +28,23 @@ public class Board {
     private final int cols;
     private final char[][] fields;
 
+    /**
+     * Creates a new board with the default dimensions of 6 rows and 7 columns.
+     * 
+     * @return a Board instance of default dimensions
+     */
     public static Board newDefaultBoard() {
         return new Board(6, 7);
     }
 
+    /**
+     * Creates a board with custom dimensions. The board must be at least of size
+     * four in every dimension.
+     * 
+     * @param rows number of rows
+     * @param cols number of columns
+     * @return a board of the given dimensions
+     */
     public static Board newCustomBoard(int rows, int cols) {
         if (rows < 4 || cols < 4) {
             throw new IllegalArgumentException("A board needs at least four rows and columns.");
@@ -31,6 +52,15 @@ public class Board {
         return new Board(rows, cols);
     }
 
+    /**
+     * Creates a Board instance from the given two-dimensional fields array. The
+     * fields either must be empty or be from player one or two. The minimum
+     * dimensions are 4x4.
+     * 
+     * @param fields two-dimensional array consisting of empty and player one/two
+     *               fields
+     * @return a Board instance with the given fields
+     */
     public static Board of(char[][] fields) {
         if (fields.length < 4 || fields[0].length < 4) {
             throw new IllegalArgumentException("A board needs at least four rows and columns.");
@@ -66,10 +96,22 @@ public class Board {
         this.cols = fields[0].length;
     }
 
+    /**
+     * Returns the board's underlying fields as a two-dimensional array. The rows
+     * are the first dimension, the columns are the second dimension.
+     * 
+     * @return a two-dimensional array representing the board
+     */
     public char[][] getFields() {
         return this.fields;
     }
 
+    /**
+     * Checks whether or not a move is allowed in the given slot.
+     * 
+     * @param slot a zero-based column index
+     * @return a boolean indicating whether or not the move is legal
+     */
     public boolean isLegalMove(int slot) {
         if (slot < 0 || slot >= this.cols) {
             return false;
@@ -79,6 +121,13 @@ public class Board {
         return field == Board.EMPTY_FIELD;
     }
 
+    /**
+     * Let's the given player's stone drop into the given slot.
+     * 
+     * @param slot   a zero-based column index
+     * @param player the symbol for either player one or two
+     * @return the row (zero-based horizontal index) to which the stone dropped
+     */
     public int playMove(int slot, char player) {
         if (!isLegalMove(slot)) {
             var error = String.format("Move in slot %d is not a legal move.", slot);
@@ -98,6 +147,15 @@ public class Board {
         throw new IllegalStateException(error);
     }
 
+    /**
+     * Checks if the stone played in slot x that dropped to row y is part of a
+     * winning sequence, i.e. four of the same fields in a row.
+     * 
+     * @param x the slot a stone was dropped into
+     * @param y the row a stone has fallen down to
+     * @return a boolean indicating wether or not the given indices are part of a
+     *         winning sequence
+     */
     public boolean isWinningSequenceAt(int x, int y) {
         char field = this.fields[y][x];
         if (field != Board.PLAYER_ONE_FIELD && field != Board.PLAYER_TWO_FIELD) {
