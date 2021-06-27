@@ -50,4 +50,56 @@ public class BoardTest {
         assertThrows(IllegalArgumentException.class, () -> Board.newCustomBoard(3, 5));
     }
 
+    @Test
+    void newBoardOfEmptyFields() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
+        };
+
+        Board board = Board.of(fields);
+
+        assertArrayEquals(fields, board.getFields());
+    }
+
+    @Test
+    void newBoardOfLegalFields() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', },
+            {' ', ' ', 'o', ' ', ' ', ' ', ' ', },
+            {' ', ' ', 'x', 'x', ' ', ' ', ' ', },
+            {' ', ' ', 'x', 'o', 'o', ' ', ' ', },
+            {' ', 'o', 'x', 'x', 'x', 'o', ' ', }
+        };
+
+        Board board = Board.of(fields);
+
+        assertArrayEquals(fields, board.getFields());
+    }
+
+    @Test
+    void newBoardOfIllegalDimension() {
+        char[][] fields = {
+            {' ', ' ', ' ', },
+            {' ', ' ', ' ', },
+            {' ', ' ', ' ', }
+        };
+
+        assertThrows(IllegalArgumentException.class, () -> Board.of(fields));
+    }
+
+    @Test
+    void newBoardOfIllegalFields() {
+        char[][] fields = {
+            {' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' '},
+            {' ', '#', ' ', ' '}
+        };
+
+        assertThrows(IllegalArgumentException.class, () -> Board.of(fields));
+    }
 }
